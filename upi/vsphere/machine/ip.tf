@@ -1,8 +1,9 @@
 locals {
-  network      = "${cidrhost(var.machine_cidr,0)}"
-  ip_addresses = ["${coalescelist(var.ip_addresses, data.template_file.ip_address.*.rendered)}"]
+  network      = cidrhost(var.machine_cidr, 0)
+  ip_addresses = tolist(vsphere_virtual_machine.vm.*.default_ip_address)
 }
 
+/*
 data "external" "ip_address" {
   count = "${length(var.ip_addresses) == 0 ? var.instance_count : 0}"
 
@@ -40,3 +41,4 @@ curl -s "http://${var.ipam}/api/removeHost.php?apiapp=address&apitoken=${var.ipa
 EOF
   }
 }
+*/
